@@ -184,7 +184,7 @@ function(iplug_configure_vst3 target)
     add_custom_command(TARGET ${target} POST_BUILD
       COMMAND "${CMAKE_BINARY_DIR}/postbuild-win.bat" 
       ARGS "\"$<TARGET_FILE:${target}>\"" "\".vst3\""
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_PDB_FILE:${target}>" "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}-vst3.pdb" || echo "No PDB found for VST3"
+      #COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_PDB_FILE:${target}>" "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}-vst3.pdb" || echo "No PDB found for VST3"
     )
 
   elseif (APPLE)
