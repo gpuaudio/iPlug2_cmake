@@ -13,7 +13,7 @@ cmake_policy(SET CMP0076 NEW)
 set(iPlug2_FOUND 1)
 
 # Define common variables
-set(PLUG_NAME ${CMAKE_PROJECT_NAME} CACHE STRING "Name of the App/CLAP/VST/AU etc.")
+set(PLUG_NAME ${PROJECT_NAME} CACHE STRING "Name of the App/CLAP/VST/AU etc.")
 
 # Platform-specific settings
 if(WIN32)
