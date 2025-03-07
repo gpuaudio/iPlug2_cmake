@@ -187,6 +187,14 @@ function(iplug_configure_vst3 target)
       #COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_PDB_FILE:${target}>" "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}-vst3.pdb" || echo "No PDB found for VST3"
     )
 
+    # This might require admin rights on the target machine
+    if (VST3_WIN_DEPLOY)
+      add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}.vst3" "${install_dir}"
+        COMMAND ${CMAKE_COMMAND} -E echo "Deploy VST3 to ${install_dir}..."
+    )
+    endif()
+
   elseif (APPLE)
     set(res_dir "${out_dir}/Contents/Resources")
 
