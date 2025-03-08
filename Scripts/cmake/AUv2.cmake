@@ -63,11 +63,15 @@ function(iplug_configure_auv2 target)
     COMMAND ${CMAKE_COMMAND} -E make_directory "${out_dir}/Contents/MacOS"
     COMMAND ${CMAKE_COMMAND} -E make_directory "${res_dir}"
     COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${target}>" "${out_dir}/Contents/MacOS"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${out_dir}" "${install_dir}"
     COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/out"
     COMMAND dsymutil "$<TARGET_FILE:${target}>" -o "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}.auv2.dSYM"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "$<TARGET_BUNDLE_DIR:${target}>.dSYM" "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}.auv2.dSYM" || echo "No dSYM found for AUv2"
   )
+
+  if (AUv2_DEPLOY)
+    add_custom_command(TARGET ${target} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory "${out_dir}" "${install_dir}")
+  endif()
     
   set(PKGINFO_FILE "${out_dir}/Contents/PkgInfo")
   file(WRITE ${PKGINFO_FILE} "BNDL????")

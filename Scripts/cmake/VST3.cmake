@@ -188,7 +188,7 @@ function(iplug_configure_vst3 target)
     )
 
     # This might require admin rights on the target machine
-    if (VST3_WIN_DEPLOY)
+    if (VST3_DEPLOY)
       add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}.vst3" "${install_dir}"
         COMMAND ${CMAKE_COMMAND} -E echo "Deploy VST3 to ${install_dir}..."
@@ -219,8 +219,12 @@ function(iplug_configure_vst3 target)
       )
     endif()
     
+    if(VST3_DEPLOY)
+        add_custom_command(TARGET ${target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${out_dir}" "${install_dir}")
+    endif()
+
     add_custom_command(TARGET ${target} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory "${out_dir}" "${install_dir}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/out"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${res_dir}"
       COMMAND dsymutil "$<TARGET_FILE:${target}>" -o "${CMAKE_BINARY_DIR}/out/${PLUG_NAME}.vst3.dSYM"
