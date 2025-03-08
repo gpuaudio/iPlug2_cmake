@@ -364,7 +364,7 @@ endif()
 # Compiler-specific configurations
 if(MSVC)
   list(APPEND _def "_CRT_SECURE_NO_WARNINGS" "_CRT_SECURE_NO_DEPRECATE" "_CRT_NONSTDC_NO_DEPRECATE" "NOMINMAX" "_MBCS")
-  list(APPEND _opts "/wd4996" "/wd4250" "/wd4018" "/wd4267" "/wd4068" "/MT$<$<CONFIG:Debug>:d>")
+  list(APPEND _opts "/wd4996" "/wd4250" "/wd4018" "/wd4267" "/wd4068")
 endif()
 
 # Set certain compiler flags

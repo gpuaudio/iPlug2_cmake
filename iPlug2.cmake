@@ -20,8 +20,9 @@ list(APPEND CMAKE_MODULE_PATH ${IPLUG2_CMAKE_DIR})
 # This is used in many places
 set(IPLUG2_DIR ${CMAKE_CURRENT_LIST_DIR})
 
+# We don't use Skia, but NanoVG. So it's safe to comment this out.
 # Make sure MSVC uses static linking for compatibility with Skia libraries and easier distribution.
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+#set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # We generate folders for targets that support it (Visual Studio, Xcode, etc.)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
