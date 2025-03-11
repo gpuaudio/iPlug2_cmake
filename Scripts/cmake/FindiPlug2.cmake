@@ -93,6 +93,14 @@ function(iplug_target_add target set_type)
   
   if(cfg_RESOURCE)
     set_property(TARGET ${target} APPEND PROPERTY RESOURCE ${cfg_RESOURCE})
+    if(APPLE)
+      set_source_files_properties(${cfg_RESOURCE}
+        TARGET_DIRECTORY ${target}
+        PROPERTIES
+          MACOSX_PACKAGE_LOCATION "Resources"
+      )
+      target_sources(${target} PUBLIC ${cfg_RESOURCE})
+    endif()
   endif()
   
   if(cfg_UNUSED)
@@ -165,17 +173,25 @@ endfunction()
 # Function to bundle resources
 function(iplug_target_bundle_resources target res_dir)
   get_property(resources TARGET ${target} PROPERTY RESOURCE)
-#  if(CMAKE_GENERATOR STREQUAL "Xcode")
-#    # On Xcode, mark each file as non-compiled
-#    foreach(res ${resources})
-#      get_filename_component(fn "${res}" NAME)
-#      set(file_type "file")
-#      if(fn MATCHES ".*\\.xib")
-#        set(file_type "file.xib")
-#      endif()
-#      set_property(SOURCE ${res} PROPERTY XCODE_LAST_KNOWN_FILE_TYPE ${file_type})
-#    endforeach()
-#  else()
+  if(CMAKE_GENERATOR STREQUAL "Xcode")
+    # On Xcode, mark each file as non-compiled
+    foreach(res ${resources})
+      get_filename_component(fn "${res}" NAME)
+      set(file_type "file")
+      if(fn MATCHES ".*\\.xib")
+        set(file_type "file.xib")
+      endif()
+      set_property(SOURCE ${res} PROPERTY XCODE_LAST_KNOWN_FILE_TYPE ${file_type})
+
+      # For some baffling reason Xcode doesn't pick up .png and .jpg files
+      if((fn MATCHES ".*\\.png") OR (fn MATCHES ".*\\.jpg"))
+        set(dst "${res_dir}/${fn}")
+        add_custom_command(TARGET ${target} POST_BUILD
+          COMMAND ${CMAKE_COMMAND} ARGS "-E" "copy" "${res}" "${dst}"
+        )
+      endif()
+    endforeach()
+  else()
     # For other generators, manually copy resources
     foreach(res ${resources})
       get_filename_component(fn "${res}" NAME)
@@ -213,7 +229,7 @@ function(iplug_target_bundle_resources target res_dir)
           MAIN_DEPENDENCY "${res}")
       endif()
     endforeach()
-#  endif()
+  endif()
 endfunction()
 
 # Function to configure target for specific output type

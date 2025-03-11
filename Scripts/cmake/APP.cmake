@@ -163,6 +163,7 @@ function(iplug_configure_app target)
       set_target_properties(${target} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY_DEBUG "${out_dir}"
         RUNTIME_OUTPUT_DIRECTORY_RELEASE "${out_dir}"
+        RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${out_dir}"
       )
     endif()
 
